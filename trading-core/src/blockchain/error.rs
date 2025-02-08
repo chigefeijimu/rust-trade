@@ -4,18 +4,16 @@ use thiserror::Error;
 pub enum BlockchainError {
     #[error("Connection error: {0}")]
     ConnectionError(String),
-
-    #[error("Client not initialized")]
-    NotInitialized,
-
-    #[error("Substrate error: {0}")]
-    SubstrateError(String),
-
-    #[error("Block not found")]
-    BlockNotFound,
-
-    #[error("Invalid block number")]
-    InvalidBlockNumber,
+    
+    #[error("Invalid address")]
+    InvalidAddress,
+    
+    #[error("Account not found")]
+    AccountNotFound,
+    
+    #[error("Storage error: {0}")]
+    StorageError(String),
+    
+    #[error("Decode error: {0}")]
+    DecodeError(String),
 }
-
-pub type Result<T> = std::result::Result<T, BlockchainError>;
