@@ -5,7 +5,11 @@ use std::str::FromStr;
 use error::BlockchainError;
 use subxt::{utils::AccountId32, OnlineClient, PolkadotConfig};
 use sp_keyring::AccountKeyring;
-use codec::{Decode, Encode};
+use codec::Decode;
+use subxt::tx::PairSigner; 
+
+#[subxt::subxt(runtime_metadata_path = "metadata.scale")]
+pub mod polkadot {}
 
 pub struct BlockchainManager {
     client: OnlineClient<PolkadotConfig>,
@@ -79,57 +83,52 @@ impl BlockchainManager {
         let to_account = AccountId32::from_str(to_address)
             .map_err(|_| BlockchainError::InvalidAddress)?;
     
-        println!("Step 2: Creating signer...");
-        let pair_signer = subxt::tx::PairSigner::new(from_pair);
+        println!("Step 2: Preparing transaction...");
+        let pair_signer = PairSigner::new(from_pair);
     
-        println!("Step 3: Building transaction...");
-        let dest = subxt::dynamic::Value::named_composite([
-            ("Id", subxt::dynamic::Value::from_bytes(to_account.encode()))
-        ]);
+        // 使用 MultiAddress::Id 包装目标地址
+        let dest = subxt::utils::MultiAddress::Id(to_account);
     
-        let call = subxt::dynamic::tx(
-            "Balances",
-            "transfer_allow_death",
-            vec![
-                dest,
-                subxt::dynamic::Value::u128(amount),
-            ],
-        );
+        // 构建转账交易
+        let transfer_tx = polkadot::tx()
+            .balances()
+            .transfer_allow_death(dest, amount);
     
-        println!("Step 4: Submitting transaction...");
-        match self.client
+        println!("Step 3: Submitting transaction...");
+        let events = self.client
             .tx()
-            .sign_and_submit_default(&call, &pair_signer)
-            .await {
-                Ok(_) => println!("Transaction submitted successfully"),
-                Err(e) => {
-                    println!("Transaction submission error: {:?}", e);
-                    return Err(BlockchainError::TransactionError(e.to_string()));
-                }
-            };
-    
-        println!("Step 5: Getting latest block...");
-
-        tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
-        
-        let block = self.client
-            .blocks()
-            .at_latest()
+            .sign_and_submit_then_watch_default(&transfer_tx, &pair_signer)
             .await
-            .map_err(|e| BlockchainError::QueryError(e.to_string()))?;
+            .map_err(|e| BlockchainError::TransactionError(format!("Failed to submit: {}", e)))?
+            .wait_for_finalized_success()
+            .await
+            .map_err(|e| BlockchainError::TransactionError(format!("Failed to finalize: {}", e)))?;
     
-        let block_hash = block.hash();
-        let block_number = block.number();
+        // 解析交易事件
+        let transfer_event = events
+            .find_first::<polkadot::balances::events::Transfer>()
+            .map_err(|e| BlockchainError::TransactionError(format!("Failed to find event: {}", e)))?;
     
-        println!("Step 6: Transaction completed.");
-        Ok(types::TransferDetails {
-            from: pair_signer.account_id().to_string(),
-            to: to_address.to_string(),
-            amount,
-            block_hash: block_hash.to_string(),
-            block_number,
-            success: true,
-        })
+        if let Some(event) = transfer_event {
+            println!("Transfer successful: {:?}", event);
+            
+            let block = self.client
+                .blocks()
+                .at_latest()
+                .await
+                .map_err(|e| BlockchainError::QueryError(e.to_string()))?;
+    
+            Ok(types::TransferDetails {
+                from: pair_signer.account_id().to_string(),
+                to: to_address.to_string(),
+                amount,
+                block_hash: block.hash().to_string(),
+                block_number: block.number(),
+                success: true,
+            })
+        } else {
+            Err(BlockchainError::TransactionError("Transfer event not found".to_string()))
+        }
     }
     
     pub async fn get_transfer_history(&self, address: &str) -> Result<Vec<types::BlockEvent>, BlockchainError> {
