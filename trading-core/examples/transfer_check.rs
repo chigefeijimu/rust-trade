@@ -1,4 +1,3 @@
-// examples/transfer_test.rs
 use trading_core::blockchain::{BlockchainManager, error::BlockchainError};
 use sp_keyring::AccountKeyring;
 
@@ -9,7 +8,7 @@ async fn main() -> Result<(), BlockchainError> {
     let blockchain = BlockchainManager::new("ws://127.0.0.1:9944").await?;
     
     // 2. 准备账户
-    let alice = AccountKeyring::Alice.pair();
+    let alice = AccountKeyring::Alice.pair(); 
     let bob_address = AccountKeyring::Bob.to_account_id().to_string();
     println!("Bob's address: {}", bob_address);
 
@@ -24,10 +23,10 @@ async fn main() -> Result<(), BlockchainError> {
     }
 
     // 4. 执行转账
-    let transfer_amount = 100_000_000_000_000; // 0.1 DOT
+    let transfer_amount = 100_000_000_000_000; 
     println!("\nTransferring {} planck from Alice to Bob...", transfer_amount);
     
-    let result = blockchain.transfer(alice, &bob_address, transfer_amount).await?;
+    let result = blockchain.transfer(alice, &bob_address, transfer_amount).await?; 
     println!("Transfer successful!");
     println!("Transaction details:");
     println!("  From: {}", result.from);

@@ -2,7 +2,6 @@ pub mod types;
 pub mod error;
 
 use std::str::FromStr;
-
 use error::BlockchainError;
 use subxt::{utils::AccountId32, OnlineClient, PolkadotConfig};
 use sp_keyring::AccountKeyring;

@@ -18,3 +18,5 @@ And you could check it on [Polkadot.js Apps Accounts](https://polkadot.js.org/ap
 The information are same as what we printed:
 
 ![substrate_node_test](../assets/substrate_node.png)
+
+You could check subxt's document here: https://github.com/paritytech/subxt
