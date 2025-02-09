@@ -16,4 +16,10 @@ pub enum BlockchainError {
     
     #[error("Decode error: {0}")]
     DecodeError(String),
+
+    #[error("Transaction error: {0}")]
+    TransactionError(String),
+
+    #[error("Query error: {0}")]
+    QueryError(String),
 }
