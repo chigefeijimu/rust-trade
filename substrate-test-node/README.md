@@ -59,7 +59,19 @@ The provided `Dockerfile`:
 
 ## Stopping and Restarting the Container
 
-To stop the running container:
+To stop the running container while keeping the data and configuration intact:
+
+```bash
+docker-compose stop
+```
+
+To start the container again without rebuilding:
+
+```bash
+docker-compose start
+```
+
+To completely stop and remove the container:
 
 ```bash
 docker-compose down
