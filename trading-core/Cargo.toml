@@ -25,12 +25,9 @@ rust_decimal = { version = "1.32", features = ["serde"] }
 async-trait = "0.1"
 clap = { version = "4.4", features = ["derive"] }
 
-# 区块链相关
-# 链交互工具
-subxt = { version = "0.32.1", features = ["substrate-compat"] }
-subxt-signer = "0.32.1"
-codec = { package = "parity-scale-codec", version = "3.6.5", features = ["derive"] }
 
-# 账户和签名
-sp-core = "24.0.0"
+subxt = "0.32.1"
+subxt-signer = { version = "0.32.1", features = ["subxt"] }
+codec = { package = "parity-scale-codec", version = "3.6.5", features = ["derive"] }
+sp-core = "21.0.0"
 sp-keyring = "24.0.0"
