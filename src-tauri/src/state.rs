@@ -2,7 +2,7 @@ use std::sync::Arc;
 use trading_core::{
     data::{
         database::Database,
-        market_data::MarketDataManager,
+        types::MarketDataManager,
     },
     config::Settings,
 };

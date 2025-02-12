@@ -9,7 +9,7 @@ use trading_core::{
         sma::SMAStrategy,
         types::{BacktestRequest, BacktestResponse, TradeResponse, StrategyType}
     },
-    data::market_data::MarketDataManager,
+    data::types::MarketDataManager,
 };
 use tracing::{info, error, debug};
 
