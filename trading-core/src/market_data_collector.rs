@@ -148,7 +148,7 @@ mod tests {
         info!("Initializing Binance connection...");
         
         // 创建交易所服务
-        let exchange = BinanceSpot::new(None, None);
+        let exchange = BinanceSpot::new(None);
         
         // 创建数据采集器
         let collector = Arc::new(MarketDataCollector::new(

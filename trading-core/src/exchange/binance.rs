@@ -14,13 +14,13 @@ use tokio_tungstenite::tungstenite::Message;
 pub struct BinanceSpot {
     client: Client,
     base_url: Url,
-    ws_url: Url,
+    //ws_url: Url,
     api_key: Option<String>,
-    api_secret: Option<String>,
+    //api_secret: Option<String>,
 }
 
 impl BinanceSpot {
-    pub fn new(api_key: Option<String>, api_secret: Option<String>) -> Self {
+    pub fn new(api_key: Option<String> /* api_secret: Option<String>*/) -> Self {
         let client = Client::builder()
             .timeout(Duration::from_secs(10))
             .build()
@@ -29,9 +29,9 @@ impl BinanceSpot {
         Self {
             client,
             base_url: Url::parse("https://api.binance.com").unwrap(),
-            ws_url: Url::parse("wss://stream.binance.com:9443").unwrap(),
+            //ws_url: Url::parse("wss://stream.binance.com:9443").unwrap(),
             api_key,
-            api_secret,
+            //api_secret,
         }
     }
     

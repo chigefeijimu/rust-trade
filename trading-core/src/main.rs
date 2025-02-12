@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
    match Cli::parse().command.unwrap_or(Commands::Server) {
        Commands::Server => {
            // 初始化交易所和数据收集器
-           let exchange = BinanceSpot::new(None, None);
+           let exchange = BinanceSpot::new(None);
            let collector = Arc::new(MarketDataCollector::new(
                Box::new(exchange),
                MarketDataManager::new(database.pool.clone()),

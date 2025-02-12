@@ -3,7 +3,7 @@ use sqlx::{postgres::types::PgInterval, PgPool};
 use thiserror::Error;
 use tracing::{debug, error, info};
 
-use super::types::{MarketDataPoint, MarketDataManager, TickData};
+use super::types::{MarketDataPoint, MarketDataManager};
 
 #[derive(Error, Debug)]
 pub enum MarketDataError {
