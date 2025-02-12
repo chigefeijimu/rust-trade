@@ -1,6 +1,6 @@
 // src/state.rs
 
-use crate::data::market_data::MarketDataManager;
+use crate::data::types::MarketDataManager;
 
 pub struct AppState {
     pub market_manager: MarketDataManager,

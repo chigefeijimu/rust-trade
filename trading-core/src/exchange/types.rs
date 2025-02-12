@@ -1,5 +1,5 @@
 // services/exchange/types.rs
-use crate::data::market_data::MarketDataPoint;
+use crate::data::types::MarketDataPoint;
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};

@@ -9,7 +9,7 @@ use rust_decimal::Decimal;
 
 use trading_core::{
    backtest::{engine::BacktestEngine, sma::SMAStrategy, types::OrderSide, BacktestConfig}, 
-   config::Settings, data::{database::Database, market_data::MarketDataManager}, 
+   config::Settings, data::{database::Database, types::MarketDataManager}, 
    exchange::binance::BinanceSpot, market_data_collector::MarketDataCollector
 };
 

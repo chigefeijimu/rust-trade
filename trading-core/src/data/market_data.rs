@@ -1,8 +1,9 @@
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
 use sqlx::{postgres::types::PgInterval, PgPool};
 use thiserror::Error;
 use tracing::{debug, error, info};
+
+use super::types::{MarketDataPoint, MarketDataManager, TickData};
 
 #[derive(Error, Debug)]
 pub enum MarketDataError {
@@ -12,18 +13,6 @@ pub enum MarketDataError {
     InvalidDataFormat(String),
     #[error("Data fetch error: {0}")]
     FetchError(String),
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct MarketDataPoint {
-    pub timestamp: DateTime<Utc>,
-    pub symbol: String,
-    pub price: f64,
-    pub volume: f64,
-    pub high: f64,
-    pub low: f64,
-    pub open: f64,
-    pub close: f64,
 }
 
 impl MarketDataPoint {
@@ -48,22 +37,6 @@ impl MarketDataPoint {
             close,
         }
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TickData {
-    pub timestamp: DateTime<Utc>,
-    pub symbol: String,
-    pub price: f64,
-    pub volume: f64,
-    pub side: String,
-    pub trade_id: String,
-    pub is_maker: bool,
-}
-
-#[derive(Clone)]
-pub struct MarketDataManager {
-    pub pool: PgPool,
 }
 
 impl MarketDataManager {

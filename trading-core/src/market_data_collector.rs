@@ -1,4 +1,4 @@
-use crate::data::market_data::{MarketDataManager, MarketDataPoint};
+use crate::data::types::{MarketDataManager, MarketDataPoint};
 use crate::exchange::types::{Exchange, ExchangeError};
 use tokio::sync::{broadcast, mpsc};
 use tokio::time::{sleep, Duration};

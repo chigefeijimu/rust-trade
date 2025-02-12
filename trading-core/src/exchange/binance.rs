@@ -1,5 +1,5 @@
 use super::types::*;
-use crate::data::market_data::MarketDataPoint;
+use crate::data::types::MarketDataPoint;
 use chrono::{DateTime, TimeZone, Utc};
 use reqwest::{Client, Url};
 use rust_decimal::Decimal;

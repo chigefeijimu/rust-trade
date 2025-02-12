@@ -2,7 +2,7 @@
 // This is only an example to test system function, we should not use it to trade. 
 
 use crate::backtest::{Strategy, Order, Portfolio, OrderType, OrderSide};
-use crate::data::market_data::MarketDataPoint;
+use crate::data::types::MarketDataPoint;
 use rust_decimal::Decimal;
 use std::collections::{HashMap, VecDeque};
 

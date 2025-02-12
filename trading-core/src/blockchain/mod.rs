@@ -3,10 +3,12 @@ pub mod error;
 
 use std::str::FromStr;
 use error::BlockchainError;
-use subxt::{utils::AccountId32, OnlineClient, PolkadotConfig};
+use subxt::{OnlineClient, PolkadotConfig};
+use subxt_signer::sr25519::{dev, Keypair};
+use subxt::utils::{AccountId32, MultiAddress};
 use sp_keyring::AccountKeyring;
 use codec::Decode;
-use subxt::tx::PairSigner; 
+use sp_core::crypto::Ss58Codec; 
 
 #[subxt::subxt(runtime_metadata_path = "metadata.scale")]
 pub mod polkadot {}
@@ -73,64 +75,69 @@ impl BlockchainManager {
         }
     }
     
-    pub async fn transfer(
-        &self,
-        from_pair: subxt::ext::sp_core::sr25519::Pair,
-        to_address: &str,
-        amount: u128
-    ) -> Result<types::TransferDetails, BlockchainError> {
-        println!("Step 1: Converting addresses...");
-        let to_account = AccountId32::from_str(to_address)
-            .map_err(|_| BlockchainError::InvalidAddress)?;
+    // pub async fn transfer(
+    //     &self,
+    //     from_pair: Keypair,
+    //     to_address: &str,
+    //     amount: u128
+    // ) -> Result<types::TransferDetails, BlockchainError> {
+    //     println!("Step 1: Converting addresses...");
+        
+    //     // 转换目标地址
+    //     let to_account = AccountId32::from_str(to_address)
+    //         .map_err(|_| BlockchainError::InvalidAddress)?;
+    //     let dest = MultiAddress::Id(to_account);
     
-        println!("Step 2: Preparing transaction...");
-        let pair_signer = PairSigner::new(from_pair);
+    //     println!("Step 2: Preparing transaction...");
+    //     let transfer_tx = polkadot::tx()
+    //         .balances()
+    //         .transfer_allow_death(dest, amount);
     
-        // 使用 MultiAddress::Id 包装目标地址
-        let dest = subxt::utils::MultiAddress::Id(to_account);
+    //     println!("Step 3: Submitting transaction...");
+        
+    //     // 使用 from_pair 的原始公钥字节作为标识
+    //     let from_public = from_pair.public_key();
+    //     let from_address = format!("0x{}", hex::encode(from_public.as_ref()));
     
-        // 构建转账交易
-        let transfer_tx = polkadot::tx()
-            .balances()
-            .transfer_allow_death(dest, amount);
+    //     let events = self.client
+    //         .tx()
+    //         .sign_and_submit_then_watch(
+    //             &transfer_tx,
+    //             &from_pair,
+    //             Default::default()
+    //         )
+    //         .await
+    //         .map_err(|e| BlockchainError::TransactionError(format!("Failed to submit: {}", e)))?
+    //         .wait_for_finalized_success()
+    //         .await
+    //         .map_err(|e| BlockchainError::TransactionError(format!("Failed to finalize: {}", e)))?;
     
-        println!("Step 3: Submitting transaction...");
-        let events = self.client
-            .tx()
-            .sign_and_submit_then_watch_default(&transfer_tx, &pair_signer)
-            .await
-            .map_err(|e| BlockchainError::TransactionError(format!("Failed to submit: {}", e)))?
-            .wait_for_finalized_success()
-            .await
-            .map_err(|e| BlockchainError::TransactionError(format!("Failed to finalize: {}", e)))?;
+    //     let transfer_event = events
+    //         .find_first::<polkadot::balances::events::Transfer>()
+    //         .map_err(|e| BlockchainError::TransactionError(format!("Failed to find event: {}", e)))?;
     
-        // 解析交易事件
-        let transfer_event = events
-            .find_first::<polkadot::balances::events::Transfer>()
-            .map_err(|e| BlockchainError::TransactionError(format!("Failed to find event: {}", e)))?;
-    
-        if let Some(event) = transfer_event {
-            println!("Transfer successful: {:?}", event);
+    //     if let Some(event) = transfer_event {
+    //         println!("Transfer successful: {:?}", event);
             
-            let block = self.client
-                .blocks()
-                .at_latest()
-                .await
-                .map_err(|e| BlockchainError::QueryError(e.to_string()))?;
+    //         let block = self.client
+    //             .blocks()
+    //             .at_latest()
+    //             .await
+    //             .map_err(|e| BlockchainError::QueryError(e.to_string()))?;
     
-            Ok(types::TransferDetails {
-                from: pair_signer.account_id().to_string(),
-                to: to_address.to_string(),
-                amount,
-                block_hash: block.hash().to_string(),
-                block_number: block.number(),
-                success: true,
-            })
-        } else {
-            Err(BlockchainError::TransactionError("Transfer event not found".to_string()))
-        }
-    }
-    
+    //         Ok(types::TransferDetails {
+    //             from: from_address, 
+    //             to: to_address.to_string(),
+    //             amount,
+    //             block_hash: block.hash().to_string(),
+    //             block_number: block.number(),
+    //             success: true,
+    //         })
+    //     } else {
+    //         Err(BlockchainError::TransactionError("Transfer event not found".to_string()))
+    //     }
+    // }
+
     pub async fn get_transfer_history(&self, address: &str) -> Result<Vec<types::BlockEvent>, BlockchainError> {
         let mut events = Vec::new();
         let account_id = AccountId32::from_str(address)

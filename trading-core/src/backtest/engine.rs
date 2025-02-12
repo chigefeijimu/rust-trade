@@ -2,7 +2,7 @@
 
 use super::{types::*, Strategy};
 use super::metrics::MetricsCalculator;
-use crate::data::market_data::{MarketDataManager, MarketDataPoint};
+use crate::data::types::{MarketDataManager, MarketDataPoint};
 use bigdecimal::{FromPrimitive, Zero};
 use chrono::{DateTime,Utc};
 use rust_decimal::Decimal;

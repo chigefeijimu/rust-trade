@@ -8,7 +8,7 @@ pub mod metrics;
 use std::collections::HashMap;
 pub use types::*;
 
-use crate::data::market_data::MarketDataPoint;
+use crate::data::types::MarketDataPoint;
 pub trait Strategy: Send {
     fn on_data(&mut self, data: &MarketDataPoint, portfolio: &Portfolio) -> Vec<Order>;
     fn get_parameters(&self) -> &HashMap<String, String>;
