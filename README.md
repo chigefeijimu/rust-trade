@@ -8,6 +8,51 @@ A quantitative trading system written in Rust
 Tauri 2.0 is a framework for building lightweight, secure desktop applications using web technologies and Rust. It provides a minimal footprint by leveraging the OS's webview instead of bundling a heavy runtime, offering better performance, security, and native API integration.
 
 ## Overview
+
+```bash
+rust-trade/
+├── src-tauri/                   # Tauri desktop application backend
+│   ├── src/
+│   │   ├── main.rs             # Application entry point and Tauri initialization
+│   │   ├── commands.rs         # Frontend command handlers
+│   │   └── state.rs            # Application state management
+│   └── Cargo.toml              # Tauri dependencies configuration
+│
+├── trading-core/                # Core trading library
+│   ├── src/
+│   │   ├── lib.rs              # Library entry point
+│   │   ├── data/               # Data management module
+│   │   │   ├── mod.rs          # Data module entry point
+│   │   │   ├── cache.rs        # Market data caching system
+│   │   │   ├── database.rs     # Database operations
+│   │   │   └── market_data.rs  # Market data management
+│   │   │
+│   │   ├── backtest/           # Backtesting system
+│   │   │   ├── engine.rs       # Backtesting engine
+│   │   │   ├── metrics.rs      # Performance metrics calculation
+│   │   │   └── types.rs        # Backtesting type definitions
+│   │   │
+│   │   └── blockchain/         # Blockchain module
+│   │       ├── mod.rs          # Blockchain manager
+│   │       ├── error.rs        # Error definitions
+│   │       └── types.rs        # Type definitions
+│   │
+│   ├── benches/                # Performance benchmarks
+│   │   └── market_data_cache.rs
+│   └── Cargo.toml              # Core library dependencies
+│
+├── substrate-test-node/         # Local test node
+│   ├── Dockerfile              # Node container definition
+│   └── docker-compose.yml      # Container orchestration configuration
+│
+└── frontend/                    # Next.js frontend
+    └── src/
+        ├── app/
+        │   └── page.tsx        # Main page
+        └── components/         # Shared components
+
+```
+
 rust-trade is a quantitative trading system that combines modern trading strategies with artificial intelligence. This software is released under the GNU General Public License v3.
 
 Copyright (C) 2024 Harrison
