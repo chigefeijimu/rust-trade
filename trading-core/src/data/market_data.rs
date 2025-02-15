@@ -66,7 +66,7 @@ impl MarketDataManager {
             data.price,
             data.volume,
             "BUY",  // 默认使用BUY，因为我们没有方向信息
-            format!("auto_{}", Utc::now().timestamp_nanos()),
+            format!("auto_{}", Utc::now().timestamp_nanos_opt().unwrap()),
             false
         )
         .execute(&self.pool)
