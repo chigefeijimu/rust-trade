@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
-use trading_core::data::types::{TickData, MarketDataPoint};
+use trading_core::data::types::TickData;
 use trading_core::data::cache::MarketDataCache;
 use chrono::Utc;
 use uuid::Uuid;

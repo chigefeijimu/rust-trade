@@ -4,11 +4,9 @@ pub mod error;
 use std::str::FromStr;
 use error::BlockchainError;
 use subxt::{OnlineClient, PolkadotConfig};
-use subxt_signer::sr25519::{dev, Keypair};
-use subxt::utils::{AccountId32, MultiAddress};
+use subxt::utils::AccountId32;
 use sp_keyring::AccountKeyring;
 use codec::Decode;
-use sp_core::crypto::Ss58Codec; 
 
 #[subxt::subxt(runtime_metadata_path = "metadata.scale")]
 pub mod polkadot {}

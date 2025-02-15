@@ -1,7 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 use std::sync::RwLock;
 use super::types::{TickData, MarketDataPoint};
-use chrono::{DateTime, Utc};
 
 const MAX_HISTORY_SIZE: usize = 1000;
 
@@ -150,6 +149,7 @@ impl MarketDataCache {
 mod tests {
     use super::*;
     use uuid::Uuid;
+    use chrono::Utc;
 
     fn create_test_tick(symbol: &str, price: f64, volume: f64) -> TickData {
         TickData {
