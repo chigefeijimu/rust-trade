@@ -16,19 +16,19 @@ declare global {
   }
 }
 
-interface BacktestConfig {
-  start_time: string;
-  end_time: string;
-  initial_capital: string;
-  symbol: string;
-  commission_rate: string;
-}
+// interface BacktestConfig {
+//   start_time: string;
+//   end_time: string;
+//   initial_capital: string;
+//   symbol: string;
+//   commission_rate: string;
+// }
 
-interface BacktestRequest {
-  strategy_type: string;
-  config: BacktestConfig;
-  parameters: Record<string, string>;
-}
+// interface BacktestRequest {
+//   strategy_type: string;
+//   config: BacktestConfig;
+//   parameters: Record<string, string>;
+// }
 
 interface BacktestParams {
   strategy_type: string;
